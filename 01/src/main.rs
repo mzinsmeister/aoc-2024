@@ -1,9 +1,9 @@
 use std::{collections::HashMap, fs::read_to_string, ops::DerefMut};
 
-use aoclib::read_raw_input;
+use aoclib::read_input;
 
 fn main() {
-    let input = read_raw_input("input.txt");
+    let input = read_input("input.txt");
 
     let mut list1 = Vec::new();
     let mut list2 = Vec::new();

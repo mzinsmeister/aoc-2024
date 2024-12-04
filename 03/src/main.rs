@@ -1,7 +1,7 @@
 
 
 fn main() {
-    let raw_input = aoclib::read_raw_input("input.txt");
+    let raw_input = aoclib::read_input("input.txt");
 
     let regex = regex::Regex::new(r"mul\(([0-9]{1,3}),([0-9]{1,3})\)").unwrap();
 

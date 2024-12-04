@@ -1,4 +1,4 @@
-use aoclib::read_raw_input;
+use aoclib::read_input;
 
 fn check_report(r: &[i32]) -> bool {
     let mut current = r[0];
@@ -27,7 +27,7 @@ fn check_report(r: &[i32]) -> bool {
 }
 
 fn main() {
-    let input = read_raw_input("input.txt");
+    let input = read_input("input.txt");
 
     let reports: Vec<Vec<i32>> = input.split("\n")
             .filter(|line| !line.is_empty())
