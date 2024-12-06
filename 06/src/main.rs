@@ -44,16 +44,11 @@ fn main() {
     let mut loops_found = 0;
 
     for pos in positions_visited {
-        let mut positions_visited = BTreeSet::new();
+        let mut positions_turned = BTreeSet::new();
         let mut guard_position = guard_starting_position;
         let mut guard_direction = (0, -1);
 
         loop {
-            if positions_visited.contains(&(guard_position, guard_direction)) {
-                loops_found += 1;
-                break;
-            }
-            positions_visited.insert((guard_position, guard_direction));
             let ahead_position = (guard_position.0 as isize + guard_direction.0, guard_position.1 as isize + guard_direction.1);
             if ahead_position.0 < 0 || ahead_position.1 < 0 || ahead_position.0 >= input[0].len() as isize || ahead_position.1 >= input.len() as isize {
                 break;
@@ -62,6 +57,11 @@ fn main() {
 
             if input[ahead_position.1][ahead_position.0] == '#' || ahead_position == pos {
                 guard_direction = (-guard_direction.1, guard_direction.0);
+                if positions_turned.contains(&(guard_position, guard_direction)) {
+                    loops_found += 1;
+                    break;
+                }
+                positions_turned.insert((guard_position, guard_direction));
             } else {
                 guard_position = ahead_position;
             }
