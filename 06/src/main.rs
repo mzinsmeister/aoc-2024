@@ -1,6 +1,7 @@
-use std::collections::{BTreeSet, HashSet};
+use std::{collections::{BTreeSet, HashSet}, sync::atomic::AtomicU32};
 
 use aoclib::read_input;
+use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 
 fn main() {
     let input = read_input("input.txt").into_2d_chars();
@@ -39,12 +40,8 @@ fn main() {
 
     println!("Part 1: {}", positions_visited.len());
 
-    // Try out adding a new obstacle for each visited position except the first one
-
-    let mut loops_found = 0;
-
-    for pos in positions_visited {
-        let mut positions_turned = BTreeSet::new();
+    let loops_found = positions_visited.par_iter().filter(|&&pos| {
+        let mut positions_turned: BTreeSet<((usize, usize), (isize, isize))> = BTreeSet::new();
         let mut guard_position = guard_starting_position;
         let mut guard_direction = (0, -1);
 
@@ -58,15 +55,15 @@ fn main() {
             if input[ahead_position.1][ahead_position.0] == '#' || ahead_position == pos {
                 guard_direction = (-guard_direction.1, guard_direction.0);
                 if positions_turned.contains(&(guard_position, guard_direction)) {
-                    loops_found += 1;
-                    break;
+                    return true;
                 }
                 positions_turned.insert((guard_position, guard_direction));
             } else {
                 guard_position = ahead_position;
             }
         }
-    }
+        false
+    }).count();
 
     println!("Part 2: {}", loops_found);
 }
