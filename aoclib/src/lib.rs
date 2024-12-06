@@ -11,6 +11,10 @@ impl AocInput {
     pub fn trim_last_newline(&self) -> &str {
         return &self.raw.trim_end_matches('\n');
     }
+
+    pub fn into_2d_chars(&self) -> Vec<Vec<char>> {
+        return self.trim_last_newline().lines().map(|l| l.chars().collect()).collect();
+    }
 }
 
 pub fn read_input(file: &str) -> AocInput {

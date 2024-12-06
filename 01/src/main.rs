@@ -1,4 +1,4 @@
-use std::{collections::HashMap, fs::read_to_string, ops::DerefMut};
+use std::collections::HashMap;
 
 use aoclib::read_input;
 
