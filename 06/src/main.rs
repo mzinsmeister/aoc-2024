@@ -1,4 +1,4 @@
-use std::{collections::{BTreeSet, HashSet}, sync::atomic::AtomicU32};
+use std::collections::BTreeSet;
 
 use aoclib::read_input;
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
