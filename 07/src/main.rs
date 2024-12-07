@@ -1,5 +1,7 @@
 use aoclib::read_input;
 
+use rayon::prelude::*;
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum Operator {
     Add,
@@ -65,9 +67,9 @@ fn check_equation(result: usize, operands: &[usize]) -> bool {
 
 fn check_equation2(result: usize, operands: &[usize]) -> bool {
 
-    let mut operators =  vec![Operator2::Add; operands.len() - 1];
 
-    for i in 0..(3usize.pow(operators.len() as u32)) {
+    (0..(3usize.pow(operands.len() as u32 - 1))).into_par_iter().any(|i| {
+        let mut operators =  vec![Operator2::Add; operands.len() - 1];
         for j in 0..operators.len() {
             let op = (i / 3usize.pow(j as u32)) % 3;
             operators[j] = match op {
@@ -89,9 +91,8 @@ fn check_equation2(result: usize, operands: &[usize]) -> bool {
             //println!("{} = {}", operands.iter().skip(1).zip(operators.iter()).fold(operands[0].to_string(), |acc, (operand, operator)| format!("{} {} {}", acc, match operator { Operator2::Add => "+", Operator2::Multiply => "*", Operator2::Concat => "||" }, operand)), result);
             return true;
         }
-    }
-
-    false
+        false
+    })
 }
 
 fn main() {
