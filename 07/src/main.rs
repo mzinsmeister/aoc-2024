@@ -1,65 +1,24 @@
 use aoclib::read_input;
 
-use rayon::prelude::*;
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum Operator {
-    Add,
-    Multiply
-}
-
-impl Operator {
-    fn apply(&self, a: usize, b: usize) -> usize {
-        match self {
-            Operator::Add => a + b,
-            Operator::Multiply => a * b
-        }
-    }
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum Operator2 {
-    Add,
-    Multiply,
-    Concat
-}
-
-impl Operator2 {
-    fn apply(&self, a: usize, b: usize) -> usize {
-        match self {
-            Operator2::Add => a + b,
-            Operator2::Multiply => a * b,
-            Operator2::Concat => format!("{}{}", a, b).parse::<usize>().unwrap()
-        }
-    }
-}
 
 // It's not smart but it's fast enough to run in under 10s even without --release
 
 fn check_equation(result: usize, operands: &[usize]) -> bool {
 
-    let mut operators =  vec![Operator::Add; operands.len() - 1];
+    if operands.len() == 1 {
+        return operands[0] == result;
+    }
 
-    for i in 0..(1 << operators.len()) {
-        for j in 0..operators.len() {
-            if i & (1 << j) != 0 {
-                operators[j] = Operator::Multiply;
-            } else {
-                operators[j] = Operator::Add;
-            }
-        }
+    let last = *operands.last().unwrap();
 
-        let mut current_result = operands[0];
-        for j in 0..operators.len() {
-            let operator = operators[j];
-            let operand = operands[j + 1];
-            current_result = operator.apply(current_result, operand);
-        }
+    // Check addition first
+    if result > last && check_equation(result - last, &operands[0..operands.len() - 1]) {
+        return true;
+    }
 
-        if current_result == result {
-            //println!("{} = {}", operands.iter().skip(1).zip(operators.iter()).fold(operands[0].to_string(), |acc, (operand, operator)| format!("{} {} {}", acc, match operator { Operator::Add => "+", Operator::Multiply => "*" }, operand)), result);
-            return true;
-        }
+    // Check multiplication
+    if result % last == 0 && check_equation(result / last, &operands[0..operands.len() - 1]) {
+        return true;
     }
 
     false
@@ -67,32 +26,30 @@ fn check_equation(result: usize, operands: &[usize]) -> bool {
 
 fn check_equation2(result: usize, operands: &[usize]) -> bool {
 
+    if operands.len() == 1 {
+        return operands[0] == result;
+    }
 
-    (0..(3usize.pow(operands.len() as u32 - 1))).into_par_iter().any(|i| {
-        let mut operators =  vec![Operator2::Add; operands.len() - 1];
-        for j in 0..operators.len() {
-            let op = (i / 3usize.pow(j as u32)) % 3;
-            operators[j] = match op {
-                0 => Operator2::Add,
-                1 => Operator2::Multiply,
-                2 => Operator2::Concat,
-                _ => unreachable!()
-            };
-        }
+    let last = *operands.last().unwrap();
 
-        let mut current_result = operands[0];
-        for j in 0..operators.len() {
-            let operator = operators[j];
-            let operand = operands[j + 1];
-            current_result = operator.apply(current_result, operand);
-        }
+    // Check addition first
+    if result > last && check_equation2(result - last, &operands[0..operands.len() - 1]) {
+        return true;
+    }
 
-        if current_result == result {
-            //println!("{} = {}", operands.iter().skip(1).zip(operators.iter()).fold(operands[0].to_string(), |acc, (operand, operator)| format!("{} {} {}", acc, match operator { Operator2::Add => "+", Operator2::Multiply => "*", Operator2::Concat => "||" }, operand)), result);
-            return true;
-        }
-        false
-    })
+    // Check multiplication
+    if result % last == 0 && check_equation2(result / last, &operands[0..operands.len() - 1]) {
+        return true;
+    }
+
+    // Check concatenation
+    let last_string = last.to_string();
+    let num_digits_base_10 = last_string.len() as u32; // This could be optimized
+    if result.to_string().ends_with(&last_string) && check_equation2(result / 10usize.pow(num_digits_base_10), &operands[0..operands.len() - 1]) {
+        return true;
+    }
+
+    false
 }
 
 fn main() {
