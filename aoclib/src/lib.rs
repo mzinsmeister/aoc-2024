@@ -1,7 +1,7 @@
 // I've decided to, over time, move some often used functionality to
 // a little library.
 
-use std::{hash::Hash, collections::HashMap, fs::read_to_string, ops::{Deref, DerefMut}};
+use std::{hash::Hash, fs::read_to_string, ops::{Deref, DerefMut}};
 
 pub struct AocInput {
     pub raw: String,
@@ -20,7 +20,7 @@ impl AocInput {
             where KF: Fn(&str) -> K, VF: Fn(&str) -> V {
 
         let mut map = Vec::new();
-        for (i,  line) in self.trim_last_newline().lines().enumerate() {
+        for line in self.trim_last_newline().lines() {
             let (k, v) = line.split_once(map_delim).unwrap();
             let k = kf(k);
             let mut values = Vec::new();
