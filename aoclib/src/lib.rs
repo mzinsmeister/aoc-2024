@@ -16,6 +16,10 @@ impl AocInput {
         return self.trim_last_newline().lines().map(|l| l.chars().collect()).collect();
     }
 
+    pub fn into_2d_nums<T>(&self) -> Vec<Vec<T>> where T: std::str::FromStr, <T as std::str::FromStr>::Err: std::fmt::Debug {
+        return self.trim_last_newline().lines().map(|l| l.split_whitespace().map(|n| n.parse().unwrap()).collect()).collect();
+    }
+
     pub fn into_mapping<K: Eq+Hash, KF, V, VF>(&self, kf: KF, vf: VF, map_delim: &str, values_delim: &str) -> Vec<(K, Vec<V>)>
             where KF: Fn(&str) -> K, VF: Fn(&str) -> V {
 
