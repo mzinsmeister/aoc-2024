@@ -8,6 +8,12 @@ pub struct AocInput {
 }
 
 impl AocInput {
+    pub fn split_once(&self, delim: &str) -> (AocInput, AocInput) {
+        let (left, right) = self.trim_last_newline().split_once(delim).unwrap();
+
+        return (AocInput { raw: left.to_string() }, AocInput { raw: right.to_string() });
+    }
+
     pub fn trim_last_newline(&self) -> &str {
         return &self.raw.trim_end_matches('\n');
     }
