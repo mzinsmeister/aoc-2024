@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use aoclib::read_input;
 
 fn main() {

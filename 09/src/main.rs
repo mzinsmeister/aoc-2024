@@ -1,5 +1,3 @@
-use std::{cmp::Reverse, collections::BinaryHeap};
-
 use aoclib::read_input;
 
 fn main() {

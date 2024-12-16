@@ -3,6 +3,45 @@
 
 use std::{hash::Hash, fs::read_to_string, ops::{Deref, DerefMut}};
 
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Ord, PartialOrd, Hash)]
+pub enum Direction {
+    Up,
+    Down,
+    Left,
+    Right,
+}
+
+impl Direction {
+    pub fn into_dxdy(&self) -> (isize, isize) {
+        match self {
+            Direction::Up => (0, -1),
+            Direction::Down => (0, 1),
+            Direction::Left => (-1, 0),
+            Direction::Right => (1, 0)
+        }
+    }
+
+    pub fn rotate_clockwise(&self) -> Direction {
+        match self {
+            Direction::Up => Direction::Right,
+            Direction::Down => Direction::Left,
+            Direction::Left => Direction::Up,
+            Direction::Right => Direction::Down
+        }
+    }
+
+    pub fn rotate_counter_clockwise(&self) -> Direction {
+        match self {
+            Direction::Up => Direction::Left,
+            Direction::Down => Direction::Right,
+            Direction::Left => Direction::Down,
+            Direction::Right => Direction::Up
+        }
+    }
+}
+
+
 pub struct AocInput {
     pub raw: String,
 }
