@@ -1,4 +1,4 @@
-use std::{io::stdin, str::FromStr};
+use std::str::FromStr;
 
 use aoclib::read_input;
 
