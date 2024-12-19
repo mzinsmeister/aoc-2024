@@ -72,6 +72,24 @@ impl ComputerState {
         output
     }
 
+    fn run_hardcoded(&mut self) -> u64 {
+        let mut target = Vec::with_capacity(self.program.len());
+        for i in 0..u64::MAX {
+            target.clear();
+            let mut a = i;
+            while a > 0 {
+                let mut b = a % 8;
+                b =self.b.bitxor(2);
+                let c = self.a / (1 << b);
+                self.b = self.b.bitxor(c);
+                self.b = self.b.bitxor(3);
+                target.push(self.b as u64);
+                
+            }
+        }
+        unreachable!()
+    }
+
 }
 
 /*
@@ -101,7 +119,7 @@ fn solve2(cur: u64, rest: &[u8]) -> Option<u64> {
         b = b.bitxor(c);
         b = b.bitxor(3);
         if b % 8 == rest[rest.len() - 1] as u64 {
-            let val = try_value(a, &rest[..rest.len() - 1]);
+            let val = solve2(a, &rest[..rest.len() - 1]);
             if let Some(val) = val {
                 return Some(val);
             }
