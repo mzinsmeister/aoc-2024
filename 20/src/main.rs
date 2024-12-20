@@ -1,6 +1,7 @@
 use std::collections::VecDeque;
 
 use aoclib::read_input;
+use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 
 fn get_dist_matrix(track: &Vec<Vec<char>>, start: (usize, usize)) -> Vec<Vec<usize>> {
     let mut workset = VecDeque::new();
@@ -83,9 +84,8 @@ fn main() {
 
     let no_cheat_length = start_dist[end_pos.1][end_pos.0];
 
-    let mut result = 0;
-
-    for cheat_pos in path_positions.iter() {
+    let result: usize = path_positions.par_iter().map(|&cheat_pos| {
+        let mut result = 0;
         for cheat_pos_end in path_positions.iter() {
             let cheat_dist = cheat_pos.0.abs_diff(cheat_pos_end.0) + cheat_pos.1.abs_diff(cheat_pos_end.1);
             if cheat_dist <= 2 {
@@ -97,14 +97,14 @@ fn main() {
                 }
             }
         }
-    }
+        result
+    }).sum();
 
     println!("{}", result);
 
 
-    let mut result = 0;
-
-    for cheat_pos in path_positions.iter() {
+    let result: usize = path_positions.par_iter().map(|&cheat_pos| {
+        let mut result = 0;
         for cheat_pos_end in path_positions.iter() {
             let cheat_dist = cheat_pos.0.abs_diff(cheat_pos_end.0) + cheat_pos.1.abs_diff(cheat_pos_end.1);
             if cheat_dist <= 20 {
@@ -116,7 +116,8 @@ fn main() {
                 }
             }
         }
-    }
+        result
+    }).sum();
 
     println!("{}", result);
 
