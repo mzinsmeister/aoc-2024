@@ -1,4 +1,4 @@
-use std::{cmp::Ordering, collections::{BTreeMap, BTreeSet, BinaryHeap}, usize};
+use std::{cmp::Ordering, collections::{BTreeSet, BinaryHeap}, usize};
 
 use aoclib::{read_input, Direction};
 

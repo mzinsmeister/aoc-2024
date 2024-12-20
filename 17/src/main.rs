@@ -1,4 +1,4 @@
-use std::ops::{BitOrAssign, BitXor};
+use std::ops::BitXor;
 
 use aoclib::read_input;
 
@@ -70,25 +70,7 @@ impl ComputerState {
             self.ip += 2;
         }
         output
-    }
-
-    fn run_hardcoded(&mut self) -> u64 {
-        let mut target = Vec::with_capacity(self.program.len());
-        for i in 0..u64::MAX {
-            target.clear();
-            let mut a = i;
-            while a > 0 {
-                let mut b = a % 8;
-                b =self.b.bitxor(2);
-                let c = self.a / (1 << b);
-                self.b = self.b.bitxor(c);
-                self.b = self.b.bitxor(3);
-                target.push(self.b as u64);
-                
-            }
-        }
-        unreachable!()
-    }
+    }     
 
 }
 
