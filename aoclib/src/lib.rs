@@ -39,6 +39,15 @@ impl Direction {
             Direction::Right => Direction::Up
         }
     }
+
+    pub fn into_char(&self) -> char {
+        match self {
+            Direction::Up => '^',
+            Direction::Down => 'v',
+            Direction::Left => '<',
+            Direction::Right => '>'
+        }
+    }
 }
 
 
